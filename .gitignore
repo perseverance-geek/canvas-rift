@@ -1,0 +1,39 @@
+# Installed dependencies and reproducible build output
+/node_modules/
+/dist/
+
+# Local tool caches and generated test reports
+/.vite/
+/.cache/
+/coverage/
+/playwright-report/
+/test-results/
+*.tsbuildinfo
+
+# Package-manager diagnostics (do not ignore all *.log files)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Local environment values; placeholder-only examples may be committed
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local development records and agent instructions; keep public demo assets tracked.
+/AGENTS.md
+/docs/PROGRESS.md
+/docs/verification.md
+/docs/code-review.md
+/docs/recording.md
+/docs/creative-direction.md
+
+# Keep source, tests, lockfiles, shared config, public docs and demo assets in Git.

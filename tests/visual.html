@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Canvas Rift · 本地视觉验收</title>
+<style>
+body{margin:0;background:#0b1829;color:#eee;font:12px system-ui}canvas{position:fixed;inset:0}nav{position:fixed;top:18px;left:18px;display:flex;gap:8px;flex-wrap:wrap;max-width:85%}button{color:#ead8b4;background:#10243ddd;border:1px solid #d9bd7e55;padding:9px;cursor:pointer}output{position:fixed;bottom:18px;left:18px;white-space:pre-wrap;background:#0b1829c9;padding:12px;font:11px monospace;pointer-events:none}
+</style>
+<canvas></canvas><nav>
+<button data-pose="cafe">首幕基线</button><button data-pose="join">街巷连接</button><button data-pose="quay">河岸构图</button><button data-pose="river">水面笔触</button><button data-pose="ascent">升空航线</button><button data-pose="crown">星冠内部</button><button data-pose="cosmos">绘画宇宙</button><button data-pose="high">高空折叠</button><button data-pose="side">高空侧向进入</button><button data-pose="back">河面回望</button><button data-pose="close">笔触侧面</button><button data-pose="seam">细缝远望</button><button data-pose="rift">裂缝正面</button><button data-pose="riftSide">裂缝斜向</button><button data-pose="garden">夜园主构图</button><button data-pose="return">裂缝返程</button><button data-pose="wide">悬空全景</button><button data-pose="mansion">倒悬宅邸</button><button data-pose="below">岛屿下方</button><button data-pose="atrium">倒悬中庭</button><button data-pose="light">悖论灯光</button><button data-pose="walk">悬空石径</button><button id="quality">轻量档</button><button id="triple">三幕与宅邸往返</button><button id="route">往返与资源检查</button>
+<button id="tour-route">运镜完整碰撞检查</button></nav><output></output>
+<script type="module">
+import * as THREE from 'three';
+import {createWorld} from '/src/art/world.ts';
+import {createRenderer} from '/src/art/render.ts';
+import {moveWithCollisions} from '/src/flight.ts';
+import {chapterAt} from '/src/journey.ts';
+import {sampleTour,entryDuration,tourDuration} from '/src/tour.ts';
+const world=createWorld(),camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,350);
+const rendering=createRenderer(document.querySelector('canvas'),world.scene,camera);
+rendering.renderer.info.autoReset=false;
+const poses={cafe:[[4.5,6.8,29],[-3,8,-18]],join:[[1,6,-115],[0,8,-230]],quay:[[7,4.5,-164],[-8,28,-370]],river:[[8,9,-216],[-15,5,-395]],ascent:[[-12,59,-273],[25,112,-338]],crown:[[67,107,-322],[-38,160,-386]],cosmos:[[5,176,-367],[12,215,-461]],high:[[0,192,-343],[-20,216,-464]],side:[[-64,175,-410],[-79,185,-500]],back:[[0,35,-410],[0,5,-168]],close:[[-62,73,-232],[-58,63,-243]],seam:[[5,236,-456],[5,243,-478]],rift:[[5,243,-525],[5,243,-625]],riftSide:[[15,247,-533],[5,243,-558]],garden:[[5,246,-610],[-26,245,-690]],return:[[5,243,-590],[5,243,-505]],wide:[[160,295,-585],[-5,275,-790]],mansion:[[45,314,-737],[0,326,-835]],below:[[0,185,-700],[0,244,-780]],atrium:[[9,323,-824],[-1,329,-835]],light:[[-34,236,-724],[-40,282,-735]],walk:[[-117,288,-821],[-61,310,-852]]};
+let pose='cafe',low=false;
+function setPose(name){
+  pose=name;camera.position.fromArray(poses[name][0]);camera.lookAt(...poses[name][1]);
+  // Also draw on demand so a background QA tab can be inspected without relying on RAF scheduling.
+  world.update(performance.now()/1000,pose==='cafe'?0:1,camera);rendering.render();
+}
+setPose('cafe');
+document.querySelectorAll('[data-pose]').forEach(b=>b.onclick=()=>setPose(b.dataset.pose));
+document.querySelector('#quality').onclick=()=>{low=!low;rendering.setQuality(low);world.setQuality(low);document.querySelector('#quality').textContent=low?'高画质':'轻量档';};
+let report='';
+document.querySelector('#tour-route').onclick=()=>{
+  let previous=sampleTour(entryDuration).position,chapter=1,changes=[],failure=null;
+  for(let tick=Math.ceil(entryDuration*600)+1;tick<=tourDuration*600;tick++){
+    const time=tick/600,target=sampleTour(time).position;
+    const actual=moveWithCollisions(previous,target.clone().sub(previous),world.obstacles);
+    if(actual.distanceTo(target)>1e-7){failure={time,actual:actual.toArray(),target:target.toArray()};break;}
+    const next=chapterAt(target,chapter);if(next!==chapter)changes.push(next);chapter=next;previous=target;
+  }
+  report=`完整运镜实际碰撞: ${!failure&&changes.join(',')==='2,3'?'PASS':'FAIL'} · 33720 步\n${JSON.stringify({changes,failure})}`;
+};
+function follow(points){
+  let p=new THREE.Vector3().fromArray(points[0]),chapter=chapterAt(p,1),changes=0;
+  for(const values of points.slice(1)){
+    const target=new THREE.Vector3().fromArray(values),delta=target.clone().sub(p),steps=Math.ceil(delta.length()/.09),step=delta.divideScalar(steps);
+    for(let i=0;i<steps;i++){p.copy(moveWithCollisions(p,step,world.obstacles));const next=chapterAt(p,chapter);if(next!==chapter)changes++;chapter=next;}
+    if(p.distanceTo(target)>.01)return {pass:false,p:p.toArray(),target:target.toArray(),changes};
+  }
+  return {pass:true,p:p.toArray(),changes};
+}
+document.querySelector('#triple').onclick=()=>{
+  const points=[[1,1.75,12],[1,1.75,-210],[1,243,-210],[5,243,-460],[5,243,-620],[9,273,-710],[0,320,-786],[0,320,-846],[8,320,-835],[8,380,-835]];
+  const result=follow([...points,...points.slice(0,-1).reverse()]);
+  report=`三幕、门洞、白昼井实际碰撞往返: ${result.pass&&result.changes===4?'PASS':'FAIL'}\n${JSON.stringify(result)}`;
+};
+document.querySelector('#route').onclick=()=>{
+  let p=new THREE.Vector3(1,1.75,12),chapter=1,changes=0;
+  for(const dz of [-.1,.1])for(let i=0;i<2600;i++){
+    p.copy(moveWithCollisions(p,new THREE.Vector3(0,0,dz),world.obstacles));
+    const next=chapterAt(p,chapter);if(next!==chapter)changes++;chapter=next;
+  }
+  const roundtrip=Math.abs(p.z-12)<1e-6&&changes===2;
+  // Warm all three acts before comparing resources; first-use uploads are not leaks.
+  for(const name of Object.keys(poses)){setPose(name);world.update(1,pose==='cafe'?0:1,camera);rendering.render();}
+  const before={...rendering.renderer.info.memory};
+  for(let i=0;i<24;i++){setPose(['cafe','cosmos','garden','atrium','return','riftSide'][i%6]);world.update(i,1,camera);rendering.render();}
+  const after={...rendering.renderer.info.memory};
+  setPose('cafe');
+  report=`实际碰撞往返: ${roundtrip?'PASS':'FAIL'} · 章节变化 ${changes} · 终点 ${p.toArray().join(',')}\nGPU往返: ${JSON.stringify(before)} → ${JSON.stringify(after)}`;
+};
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();rendering.resize();});
+let previous=performance.now(),frames=[];
+function frame(now){frames.push(now-previous);if(frames.length>120)frames.shift();previous=now;
+  rendering.renderer.info.reset();
+  world.update(now/1000,pose==='cafe'?0:1,camera);rendering.render();
+  const info=rendering.renderer.info;
+  document.querySelector('output').textContent=`${pose} · ${low?'轻量':'高'} · ${camera.position.toArray().map(n=>n.toFixed(1)).join(', ')}\n${(1000/(frames.reduce((a,b)=>a+b,0)/frames.length)).toFixed(1)} FPS · ${info.render.calls} calls · ${info.render.triangles} triangles · ${info.memory.geometries} geometries / ${info.memory.textures} textures\n${report}`;
+  requestAnimationFrame(frame);
+}requestAnimationFrame(frame);
+</script>
+</html>
