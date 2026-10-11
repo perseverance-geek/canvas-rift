@@ -122,6 +122,10 @@ npm run build    # 生产构建
 npm run preview  # 预览生产构建
 ```
 
+## 持续集成
+
+[CI 工作流](.github/workflows/ci.yml) 在推送到 `release`、向 `release` 提交 PR 或手动触发时，使用 Node.js 22 执行依赖安装、类型检查、回归测试和生产构建。推送、日志查看及配置解释见 [CI 使用与学习说明](docs/ci.md)。
+
 ## 开源协议与素材
 
 项目原创源代码及配套代码文档采用 [MIT License](LICENSE)，版权所有 © 2026 perseverance-geek。
