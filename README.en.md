@@ -8,13 +8,13 @@ The picture frame is a doorway. Canvas Rift is a 3D art world you can freely exp
 
 All three acts are implemented, connected by continuous spaces and camera movement. Walk among café tables, fly above rooftops, weave through sculptural star strokes, or enter an upside-down house to discover spaces that could never exist on a flat canvas. Built with **TypeScript + Three.js + Vite**, the world renders in real time in your browser.
 
-[Watch the video](docs/canvas-rift-demo.mp4) · [The three acts](#the-three-acts) · [Quick start](#quick-start) · [Controls](#controls)
+[Watch the video](docs/canvas-rift-demo-compressed.mp4) · [The three acts](#the-three-acts) · [Quick start](#quick-start) · [Controls](#controls)
 
 ## Recorded demo
 
-**[▶ Watch the complete three-act journey (MP4, about 63 seconds)](docs/canvas-rift-demo.mp4)**
+**[▶ Watch the complete three-act journey (MP4, about 63 seconds, 40.7 MB)](docs/canvas-rift-demo-compressed.mp4)**
 
-This recording follows the full journey: click to enter the painting, travel down the street to the riverbank, ascend along the brushstrokes, and cross the rift into the night garden and upside-down house. Open the video using the link above, or explore the screenshots and scene descriptions below.
+This recording follows the full journey: click to enter the painting, travel down the street to the riverbank, ascend along the brushstrokes, and cross the rift into the night garden and upside-down house. The link above opens the video file page. If no player is available, use Raw / Download to download it for playback. A repository file link does not guarantee inline playback in the README. Explore the screenshots and scene descriptions below.
 
 ## Highlights
 
