@@ -123,3 +123,9 @@ npm test         # Regression tests
 npm run build    # Production build
 npm run preview  # Preview the production build
 ```
+
+## License and media
+
+The project's original source code and accompanying code documentation are licensed under the [MIT License](LICENSE). Copyright © 2026 perseverance-geek.
+
+All rights are reserved for the project's original screenshots and demo videos; they are excluded from the MIT license. Except for uses permitted by applicable law, separate permission is required to reuse them. Third-party artworks, assets, and dependencies remain subject to their respective copyrights and licenses; this project's MIT license does not grant rights to that third-party content.

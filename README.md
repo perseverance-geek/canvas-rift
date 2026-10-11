@@ -121,3 +121,9 @@ npm test         # 回归测试
 npm run build    # 生产构建
 npm run preview  # 预览生产构建
 ```
+
+## 开源协议与素材
+
+项目原创源代码及配套代码文档采用 [MIT License](LICENSE)，版权所有 © 2026 perseverance-geek。
+
+项目原创截图与演示视频保留权利，不纳入 MIT 授权范围；除适用法律允许的使用外，其他使用需另行取得许可。第三方艺术作品、素材及依赖仍遵守各自的版权与授权要求，本项目的 MIT License 不授予这些第三方内容的权利。
