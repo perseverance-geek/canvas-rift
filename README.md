@@ -2,6 +2,8 @@
 
 **简体中文** · [English](README.en.md)
 
+**[在线体验 Live Demo](https://perseverance-geek.github.io/canvas-rift/)**
+
 **走进画中的街巷，飞向画布之外的宇宙。**
 
 画框是一道门。Canvas Rift 是一个可在浏览器中自由探索的三维艺术世界：从梵高的金色咖啡座出发，掠过罗讷河的星光与倒影，再穿越天空裂缝，抵达白昼与黑夜共存的超现实夜园。

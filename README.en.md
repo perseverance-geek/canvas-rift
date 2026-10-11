@@ -2,6 +2,8 @@
 
 [简体中文](README.md) · **English**
 
+**[Live Demo](https://perseverance-geek.github.io/canvas-rift/)**
+
 **Step into the painted streets. Fly beyond the canvas.**
 
 The picture frame is a doorway. Canvas Rift is a 3D art world you can freely explore in your browser: begin at Van Gogh's golden café, glide across the starlight and reflections of the Rhône, then pass through a rift in the sky into a surreal night garden where daylight and darkness coexist.
