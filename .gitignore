@@ -35,5 +35,7 @@ Desktop.ini
 /docs/code-review.md
 /docs/recording.md
 /docs/creative-direction.md
+/docs/ci.md
+/.local-notes/
 
 # Keep source, tests, lockfiles, shared config, public docs and demo assets in Git.

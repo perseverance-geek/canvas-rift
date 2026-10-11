@@ -126,7 +126,7 @@ npm run preview  # Preview the production build
 
 ## Continuous integration
 
-The [CI workflow](.github/workflows/ci.yml) runs dependency installation, type checking, regression tests, and a production build with Node.js 22 on pushes to `release`, pull requests targeting `release`, and manual runs. See the [CI learning guide (Chinese)](docs/ci.md) for pushing changes, viewing logs, and understanding the configuration.
+The [CI workflow](.github/workflows/ci.yml) runs dependency installation, type checking, regression tests, and a production build with Node.js 22 on pushes to `release`, pull requests targeting `release`, and manual runs. View run results and logs in the repository's Actions tab.
 
 ## License and media
 
